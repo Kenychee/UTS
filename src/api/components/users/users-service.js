@@ -2,23 +2,53 @@ const usersRepository = require('./users-repository');
 const { hashPassword, passwordMatched } = require('../../../utils/password');
 
 /**
- * Get list of users
- * @returns {Array}
+ * Get a list of users
+ * @param {object} params - Pagination and filter parameters
+ * @return {Promise<object>} contain paginated user data
  */
-async function getUsers() {
-  const users = await usersRepository.getUsers();
+async function getUsers(params) {
+  let { pageNumber = 1, pageSize = 10, sort, search } = params;
 
-  const results = [];
-  for (let i = 0; i < users.length; i += 1) {
-    const user = users[i];
-    results.push({
-      id: user.id,
-      name: user.name,
-      email: user.email,
-    });
+  pageNumber = parseInt(pageNumber);
+  pageSize = parseInt(pageSize);
+
+  const filter = {};
+  if (search) {
+    const [field, key] = search.split(':');
+    filter[field] = { $regex: new RegExp(key, 'i') }; //case-insensitive regex search
   }
 
-  return results;
+  let sortOption = { email: 'asc' };
+  if (sort) {
+    const [field, order] = sort.split(':');
+    sortOption = { [field]: order === 'desc' ? -1 : 1 }; //-1 untuk desc dan 1 untuk asc
+  }
+
+  const totalCount = await usersRepository.countUsers(filter);
+  const totalPages = Math.ceil(totalCount / pageSize);
+  const previousPage = pageNumber > 1;
+  const nextPage = pageNumber < totalPages;
+
+  const users = await usersRepository.getAllUsers(
+    filter,
+    sortOption,
+    pageNumber,
+    pageSize
+  );
+
+  return {
+    page_number: pageNumber,
+    page_size: pageSize,
+    count: users.length,
+    total_pages: totalPages,
+    previous_page: previousPage,
+    next_page: nextPage,
+    data: users.map((user) => ({
+      id: user._id,
+      name: user.name,
+      email: user.email,
+    })),
+  };
 }
 
 /**

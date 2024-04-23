@@ -1,4 +1,5 @@
 const usersService = require('./users-service');
+const usersRepository = require('./users-repository');
 const { errorResponder, errorTypes } = require('../../../core/errors');
 
 /**
@@ -10,7 +11,15 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  */
 async function getUsers(request, response, next) {
   try {
-    const users = await usersService.getUsers();
+    console.log('Request query:', request.query);
+    const params = {
+      pageNumber: request.query && request.query.pageNumber ? request.query.pageNumber : 1,
+      pageSize: request.query && request.query.pageSize ? request.query.pageSize : 10,
+      sort: request.query && request.query.sort ? request.query.sort : null,
+      search: request.query && request.query.search ? request.query.search : null,
+    };
+
+    const users = await usersService.getUsers(params);
     return response.status(200).json(users);
   } catch (error) {
     return next(error);
@@ -26,7 +35,7 @@ async function getUsers(request, response, next) {
  */
 async function getUser(request, response, next) {
   try {
-    const user = await usersService.getUser(request.params.id);
+    const user = await usersRepository.getUser(request.params.id);
 
     if (!user) {
       throw errorResponder(errorTypes.UNPROCESSABLE_ENTITY, 'Unknown user');
@@ -50,10 +59,10 @@ async function createUser(request, response, next) {
     const name = request.body.name;
     const email = request.body.email;
     const password = request.body.password;
-    const password_confirm = request.body.password_confirm;
+    const confirm_password = request.body.confirm_password;
 
     // Check confirmation password
-    if (password !== password_confirm) {
+    if (password !== confirm_password) {
       throw errorResponder(
         errorTypes.INVALID_PASSWORD,
         'Password confirmation mismatched'
@@ -61,7 +70,7 @@ async function createUser(request, response, next) {
     }
 
     // Email must be unique
-    const emailIsRegistered = await usersService.emailIsRegistered(email);
+    const emailIsRegistered = await usersRepository.emailIsRegistered(email);
     if (emailIsRegistered) {
       throw errorResponder(
         errorTypes.EMAIL_ALREADY_TAKEN,
@@ -69,7 +78,7 @@ async function createUser(request, response, next) {
       );
     }
 
-    const success = await usersService.createUser(name, email, password);
+    const success = await usersRepository.createUser(name, email, password);
     if (!success) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
@@ -97,7 +106,7 @@ async function updateUser(request, response, next) {
     const email = request.body.email;
 
     // Email must be unique
-    const emailIsRegistered = await usersService.emailIsRegistered(email);
+    const emailIsRegistered = await usersRepository.emailIsRegistered(email);
     if (emailIsRegistered) {
       throw errorResponder(
         errorTypes.EMAIL_ALREADY_TAKEN,
@@ -105,7 +114,7 @@ async function updateUser(request, response, next) {
       );
     }
 
-    const success = await usersService.updateUser(id, name, email);
+    const success = await usersRepository.updateUser(id, name, email);
     if (!success) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
@@ -130,7 +139,7 @@ async function deleteUser(request, response, next) {
   try {
     const id = request.params.id;
 
-    const success = await usersService.deleteUser(id);
+    const success = await usersRepository.deleteUser(id);
     if (!success) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
@@ -163,7 +172,7 @@ async function changePassword(request, response, next) {
 
     // Check old password
     if (
-      !(await usersService.checkPassword(
+      !(await usersRepository.checkPassword(
         request.params.id,
         request.body.password_old
       ))
@@ -171,7 +180,7 @@ async function changePassword(request, response, next) {
       throw errorResponder(errorTypes.INVALID_CREDENTIALS, 'Wrong password');
     }
 
-    const changeSuccess = await usersService.changePassword(
+    const changeSuccess = await usersRepository.changePassword(
       request.params.id,
       request.body.password_new
     );
