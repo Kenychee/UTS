@@ -12,14 +12,23 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
 async function getUsers(request, response, next) {
   try {
     console.log('Request query:', request.query);
-    const params = {
-      pageNumber: request.query && request.query.pageNumber ? request.query.pageNumber : 1,
-      pageSize: request.query && request.query.pageSize ? request.query.pageSize : 10,
-      sort: request.query && request.query.sort ? request.query.sort : null,
-      search: request.query && request.query.search ? request.query.search : null,
-    };
+    const pageNumber = parseInt(request.query.pageNumber, 10) || 1;
+    const pageSize = parseInt(request.query.pageSize, 10) || 10;
+    const sort = request.query.sort || null;
+    const search = request.query.search || null;
 
-    const users = await usersService.getUsers(params);
+    let users;
+    if (search) {
+      users = await usersService.getUserByEmail(search);
+      if (!users){
+        return response.status(404).json({ message: "User not found!" });
+      }
+    }
+    else {
+      const params = { pageNumber, pageSize, sort, search };
+      users= await usersService.getUsers(params);
+    }
+
     return response.status(200).json(users);
   } catch (error) {
     return next(error);
