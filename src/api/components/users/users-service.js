@@ -2,15 +2,6 @@ const usersRepository = require('./users-repository');
 const { hashPassword, passwordMatched } = require('../../../utils/password');
 
 /**
- * Get user by email
- * @param {string} email - email of the user
- * @returns {Promise<object|null>} - resolves to the user object if found, or null if not
- */
-async function getUserByEmail(email) {
-  return await usersRepository.getUserByEmail(email);
-}
-
-/**
  * Get a list of users
  * @param {object} params - Pagination and filter parameters
  * @return {Promise<object>} contain paginated user data
@@ -201,7 +192,6 @@ async function changePassword(userId, password) {
 }
 
 module.exports = {
-  getUserByEmail,
   getUsers,
   getUser,
   createUser,

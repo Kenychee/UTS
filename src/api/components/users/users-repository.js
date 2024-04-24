@@ -45,12 +45,7 @@ async function getUsers(params) {
   const previousPage = pageNumber > 1;
   const nextPage = pageNumber < totalPages;
 
-  const users = await usersRepository.getUsers(
-    filter,
-    sortOption,
-    pageNumber,
-    pageSize
-  );
+  const users = await getUsers(filter, sortOption, pageNumber, pageSize);
 
   return {
     page_number: pageNumber,
@@ -117,7 +112,7 @@ async function deleteUser(id) {
  * @param {string} email - Email
  * @returns {Promise}
  */
-async function getUserByEmail(email) {
+async function emailIsRegistered(email) {
   return User.findOne({ email });
 }
 
@@ -148,6 +143,6 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  getUserByEmail,
+  emailIsRegistered,
   changePassword,
 };
