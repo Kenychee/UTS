@@ -19,9 +19,9 @@ async function getUsers(request, response, next) {
           : 1,
       pageSize:
         request.query && request.query.pageSize ? request.query.pageSize : 10,
-      sort: request.query && request.query.sort ? request.query.sort : null,
       search:
         request.query && request.query.search ? request.query.search : null,
+      sort: request.query && request.query.sort ? request.query.sort : null,
     };
 
     const users = await usersService.getUsers(params);
