@@ -11,7 +11,6 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  */
 async function getUsers(request, response, next) {
   try {
-    console.log('Request query:', request.query);
     const params = {
       pageNumber:
         request.query && request.query.pageNumber
