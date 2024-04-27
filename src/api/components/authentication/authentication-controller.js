@@ -1,3 +1,4 @@
+const { attempt } = require('joi');
 const { errorResponder, errorTypes } = require('../../../core/errors');
 const authenticationServices = require('./authentication-service');
 
@@ -20,9 +21,12 @@ async function login(request, response, next) {
       password
     );
 
-    // if login attempt failed >= 5
+    // if login attempt failed > 5
     if (loginAttemptLimit(email)) {
-      throw errorResponder(errorTypes.FORBIDDEN, "Too many login attempts. Please try again later.");
+      throw errorResponder(
+        errorTypes.FORBIDDEN,
+        'Too many login attempts. Please try again later.', { timestamp: getCurrentDateTime() }
+      );
     }
 
     // if login unsucced < 5
@@ -31,7 +35,7 @@ async function login(request, response, next) {
       
       throw errorResponder(
         errorTypes.INVALID_CREDENTIALS,
-        'Wrong email or password'
+        'Wrong email or password.', { timestamp: getCurrentDateTime(), attemptCount: loginAttempts.get(email).count }
       );
     }
 
@@ -63,8 +67,6 @@ function failedLoginAttempts(email) {
   attempt.count += 1;
   attempt.timestamp = getCurrentDateTime(); // update timestampt for each login
   loginAttempts.set(email, attempt);
-
-  console.log(`[${attempt.timestamp}] User ${email} gagal login. Attempt = ${attempt.count}.`)
 
   // set time out if the login attempt >= 5 will reset after 30 minutes
   setTimeout(() => loginAttempts.delete(email), 30 * 60 * 1000);
