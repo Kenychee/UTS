@@ -45,7 +45,10 @@ async function getUsers(params) {
   const previousPage = pageNumber > 1;
   const nextPage = pageNumber < totalPages;
 
-  const users = await getUsers(filter, sortOption, pageNumber, pageSize);
+  const users = await User.find(filter)
+    .sort(sortOption)
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize);
 
   return {
     page_number: pageNumber,
@@ -56,7 +59,7 @@ async function getUsers(params) {
     next_page: nextPage,
     data: users.map((user) => ({
       id: user._id,
-      name: user.name,
+      name:user.name,
       email: user.email,
     })),
   };

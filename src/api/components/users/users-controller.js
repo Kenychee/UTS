@@ -1,4 +1,3 @@
-const usersService = require('./users-service');
 const usersRepository = require('./users-repository');
 const { errorResponder, errorTypes } = require('../../../core/errors');
 
@@ -11,19 +10,16 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  */
 async function getUsers(request, response, next) {
   try {
+    const { page_number, page_size, search, sort } = request.query;
+
     const params = {
-      pageNumber:
-        request.query && request.query.pageNumber
-          ? request.query.pageNumber
-          : 1,
-      pageSize:
-        request.query && request.query.pageSize ? request.query.pageSize : 10,
-      search:
-        request.query && request.query.search ? request.query.search : null,
-      sort: request.query && request.query.sort ? request.query.sort : null,
+      pageNumber: page_number ? parseInt(page_number): 1,
+      pageSize: page_size ? parseInt(page_size): 10,
+      search: search ? search: null,
+      sort: sort ? sort: null,
     };
 
-    const users = await usersService.getUsers(params);
+    const users = await usersRepository.getUsers(params);
     return response.status(200).json(users);
   } catch (error) {
     return next(error);
