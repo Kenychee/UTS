@@ -54,7 +54,7 @@ async function getTransaction(id) {
  * Create new transaction
  * @param {string} sender - Sender
  * @param {string} receipt - Receipt
- * @param {string} amount - Amount
+ * @param {number} amount - Amount
  * @param {string} description - Sender's description
  * @returns {boolean}
  */
@@ -77,7 +77,7 @@ async function createTransaction(sender, receipt, amount, description) {
  * Update existing transaction
  * @param {string} sender - Sender
  * @param {string} receipt - Receipt
- * @param {string} amount - Amount
+ * @param {number} amount - Amount
  * @param {string} description - Sender's description
  * @returns {boolean}
  */
