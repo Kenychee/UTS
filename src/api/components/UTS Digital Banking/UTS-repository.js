@@ -42,7 +42,7 @@ async function createTransaction(sender, receipt, amount, description) {
  * @param {string} description - Sender's description
  * @returns {Promise}
  */
-async function updateTransaction(sender, receipt, amount, description) {
+async function updateTransaction(id, sender, receipt, amount, description) {
   return Uts.updateOne(
     {
       _id: id,

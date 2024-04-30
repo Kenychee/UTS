@@ -5,7 +5,7 @@ module.exports = {
     body: {
       sender: joi.string().min(1).max(100).required().label('Sender'),
       receipt: joi.string().min(1).max(100).required().label('Receipt'),
-      amount: joi.number().min(1).max(100).required().label('Amount'),
+      amount: joi.number().min(1).max(1000000000).required().label('Amount'),
       description: joi.string().min(1).max(100).required().label('Description'),
     },
   },
@@ -14,7 +14,7 @@ module.exports = {
     body: {
       sender: joi.string().min(1).max(100).required().label('Sender'),
       receipt: joi.string().min(1).max(100).required().label('Receipt'),
-      amount: joi.number().min(1).max(100).required().label('Amount'),
+      amount: joi.number().min(1).max(1000000000).required().label('Amount'),
       description: joi.string().min(1).max(100).required().label('Description'),
     },
   },

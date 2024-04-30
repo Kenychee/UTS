@@ -1,4 +1,9 @@
-const { sender, receipt, amount, description } = require('../../../models/UTS-schema');
+const {
+  sender,
+  receipt,
+  amount,
+  description,
+} = require('../../../models/UTS-schema');
 const transactionRepository = require('./UTS-repository');
 
 /**
@@ -55,7 +60,12 @@ async function getTransaction(id) {
  */
 async function createTransaction(sender, receipt, amount, description) {
   try {
-    await transactionRepository.createTransaction(sender, receipt, amount, description);
+    await transactionRepository.createTransaction(
+      sender,
+      receipt,
+      amount,
+      description
+    );
   } catch (err) {
     return null;
   }
@@ -71,7 +81,7 @@ async function createTransaction(sender, receipt, amount, description) {
  * @param {string} description - Sender's description
  * @returns {boolean}
  */
-async function updateTransaction(sender, receipt, amount, description) {
+async function updateTransaction(id, sender, receipt, amount, description) {
   const transaction = await transactionRepository.getTransaction(id);
 
   // if transaction not found
@@ -80,7 +90,15 @@ async function updateTransaction(sender, receipt, amount, description) {
   }
 
   try {
-    await transactionRepository.updateTransaction(sender, receipt, amount, description);
+    await transactionRepository.updateTransaction(
+      id,
+      sender,
+      receipt,
+      amount,
+      description
+    );
+    return true;
+    
   } catch (err) {
     return null;
   }

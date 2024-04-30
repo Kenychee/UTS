@@ -1,4 +1,5 @@
 const transactionService = require('./UTS-service');
+const transactionRepository = require('./UTS-repository');
 const { errorResponder, errorTypes } = require('../../../core/errors');
 
 /**
@@ -10,9 +11,9 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  */
 async function getTransactions(request, response, next) {
   try {
-    const transactions = await transactionService.getTransaction();
+    const transactions = await transactionService.getTransactions();
 
-    if (!transaction) {
+    if (!transactions) {
       throw errorResponder(errorTypes.UNPROCESSABLE_ENTITY, 'Unknown transaction');
     }
 
