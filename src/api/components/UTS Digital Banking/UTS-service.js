@@ -10,8 +10,8 @@ const transactionRepository = require('./UTS-repository');
  * Get list of transactions
  * @returns {Array}
  */
-async function getTransactions() {
-  const transactions = await transactionRepository.getTransactions();
+async function getTransactionsKhenichi() {
+  const transactions = await transactionRepository.getTransactionsKhenichi();
 
   const results = [];
   for (let i = 0; i < transactions.length; i += 1) {
@@ -33,8 +33,8 @@ async function getTransactions() {
  * @param {string} id - Transaction's ID
  * @returns {Object}
  */
-async function getTransaction(id) {
-  const transaction = await transactionRepository.getTransaction(id);
+async function getTransactionKhenichi(id) {
+  const transaction = await transactionRepository.getTransactionKhenichi(id);
 
   // id transaction not foung
   if (!transaction) {
@@ -58,9 +58,9 @@ async function getTransaction(id) {
  * @param {string} description - Sender's description
  * @returns {boolean}
  */
-async function createTransaction(sender, receipt, amount, description) {
+async function createTransactionKhenichi(sender, receipt, amount, description) {
   try {
-    await transactionRepository.createTransaction(
+    await transactionRepository.createTransactionKhenichi(
       sender,
       receipt,
       amount,
@@ -81,8 +81,8 @@ async function createTransaction(sender, receipt, amount, description) {
  * @param {string} description - Sender's description
  * @returns {boolean}
  */
-async function updateTransaction(id, sender, receipt, amount, description) {
-  const transaction = await transactionRepository.getTransaction(id);
+async function updateTransactionKhenichi(id, sender, receipt, amount, description) {
+  const transaction = await transactionRepository.getTransactionKhenichi(id);
 
   // if transaction not found
   if (!transaction) {
@@ -90,7 +90,7 @@ async function updateTransaction(id, sender, receipt, amount, description) {
   }
 
   try {
-    await transactionRepository.updateTransaction(
+    await transactionRepository.updateTransactionKhenichi(
       id,
       sender,
       receipt,
@@ -109,8 +109,8 @@ async function updateTransaction(id, sender, receipt, amount, description) {
  * @param {string} id - Transaction's id
  * @returns {boolean}
  */
-async function deleteTransaction(id) {
-  const transaction = await transactionRepository.getTransaction(id);
+async function deleteTransactionKhenichi(id) {
+  const transaction = await transactionRepository.getTransactionKhenichi(id);
 
   // if transaction not found
   if (!transaction) {
@@ -118,7 +118,7 @@ async function deleteTransaction(id) {
   }
 
   try {
-    await transactionRepository.deleteTransaction(id);
+    await transactionRepository.deleteTransactionKhenichi(id);
   } catch (err) {
     return null;
   }
@@ -127,9 +127,9 @@ async function deleteTransaction(id) {
 }
 
 module.exports = {
-  getTransactions,
-  getTransaction,
-  createTransaction,
-  updateTransaction,
-  deleteTransaction,
+  getTransactionsKhenichi,
+  getTransactionKhenichi,
+  createTransactionKhenichi,
+  updateTransactionKhenichi,
+  deleteTransactionKhenichi,
 };

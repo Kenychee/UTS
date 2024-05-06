@@ -4,7 +4,7 @@ const { Uts } = require('../../../models');
  * Get transaction list
  * @returns {promise}
  */
-async function getTransactions() {
+async function getTransactionsKhenichi() {
   return Uts.find({});
 }
 
@@ -13,7 +13,7 @@ async function getTransactions() {
  * @param {string} id - transaction ID
  * @returns {Promise}
  */
-async function getTransaction(id) {
+async function getTransactionKhenichi(id) {
   return Uts.findById(id);
 }
 
@@ -25,7 +25,7 @@ async function getTransaction(id) {
  * @param {string} description - Sender's description
  * @returns {Promise}
  */
-async function createTransaction(sender, receipt, amount, description) {
+async function createTransactionKhenichi(sender, receipt, amount, description) {
   return Uts.create({
     sender,
     receipt,
@@ -42,7 +42,7 @@ async function createTransaction(sender, receipt, amount, description) {
  * @param {string} description - Sender's description
  * @returns {Promise}
  */
-async function updateTransaction(id, sender, receipt, amount, description) {
+async function updateTransactionKhenichi(id, sender, receipt, amount, description) {
   return Uts.updateOne(
     {
       _id: id,
@@ -63,14 +63,14 @@ async function updateTransaction(id, sender, receipt, amount, description) {
  * @param {string} id - Transaction's id
  * @returns {Promise}
  */
-async function deleteTransaction(id) {
+async function deleteTransactionKhenichi(id) {
   return Uts.deleteOne({ _id: id });
 }
 
 module.exports = {
-  getTransactions,
-  getTransaction,
-  createTransaction,
-  updateTransaction,
-  deleteTransaction,
+  getTransactionsKhenichi,
+  getTransactionKhenichi,
+  createTransactionKhenichi,
+  updateTransactionKhenichi,
+  deleteTransactionKhenichi,
 };

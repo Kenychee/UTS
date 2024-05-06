@@ -9,9 +9,9 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  * @param {object} next - Express route middlewares
  * @returns {object} Response object or pass an error to the next route
  */
-async function getTransactions(request, response, next) {
+async function getTransactionsKhenichi(request, response, next) {
   try {
-    const transactions = await transactionService.getTransactions();
+    const transactions = await transactionService.getTransactionsKhenichi();
 
     if (!transactions) {
       throw errorResponder(errorTypes.UNPROCESSABLE_ENTITY, 'Unknown transaction');
@@ -30,9 +30,9 @@ async function getTransactions(request, response, next) {
  * @param {object} next - Express route middlewares
  * @returns {object} Response object or pass an error to the next route
  */
-async function getTransaction(request, response, next) {
+async function getTransactionKhenichi(request, response, next) {
   try {
-    const transaction = await transactionService.getTransaction(request.params.id);
+    const transaction = await transactionService.getTransactionKhenichi(request.params.id);
 
     if (!transaction) {
       throw errorResponder(errorTypes.UNPROCESSABLE_ENTITY, 'Unknown transaction');
@@ -51,14 +51,14 @@ async function getTransaction(request, response, next) {
  * @param {object} next - Express route middlewares
  * @returns {object} Response object or pass an error to the next route
  */
-async function createTransaction(request, response, next) {
+async function createTransactionKhenichi(request, response, next) {
   try {
     const sender = request.body.sender;
     const receipt = request.body.receipt;
     const amount = request.body.amount;
     const description = request.body.description;
 
-    const success = await transactionService.createTransaction(sender, receipt, amount, description);
+    const success = await transactionService.createTransactionKhenichi(sender, receipt, amount, description);
     if (!success) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
@@ -79,7 +79,7 @@ async function createTransaction(request, response, next) {
  * @param {object} next - Express route middlewares
  * @returns {object} Response object or pass an error to the next route
  */
-async function updateTransaction(request, response, next) {
+async function updateTransactionKhenichi(request, response, next) {
   try {
     const id = request.params.id;
     const sender = request.body.sender;
@@ -87,7 +87,7 @@ async function updateTransaction(request, response, next) {
     const amount = request.body.amount;
     const description = request.body.description;
 
-    const success = await transactionService.updateTransaction(id, sender, receipt, amount, description);
+    const success = await transactionService.updateTransactionKhenichi(id, sender, receipt, amount, description);
     if (!success) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
@@ -108,11 +108,11 @@ async function updateTransaction(request, response, next) {
  * @param {object} next - Express route middlewares
  * @returns {object} Response object or pass an error to the next route
  */
-async function deleteTransaction(request, response, next) {
+async function deleteTransactionKhenichi(request, response, next) {
   try {
     const id = request.params.id;
 
-    const success = await transactionService.deleteTransaction(id);
+    const success = await transactionService.deleteTransactionKhenichi(id);
     if (!success) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
@@ -127,9 +127,9 @@ async function deleteTransaction(request, response, next) {
 }
 
 module.exports = {
-  getTransactions,
-  getTransaction,
-  createTransaction,
-  updateTransaction,
-  deleteTransaction,
+  getTransactionsKhenichi,
+  getTransactionKhenichi,
+  createTransactionKhenichi,
+  updateTransactionKhenichi,
+  deleteTransactionKhenichi,
 };
